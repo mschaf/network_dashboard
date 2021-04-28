@@ -1,0 +1,7 @@
+.menu
+
+  .text-end.show-on-mobile
+    .menu--close(layout--hide-menu)
+      = icon :close_menu
+
+  = link_to icon(:dashboard, 'Dashboard'), root_path, class: 'menu--item ', 'up-target': '.layout--content', 'layout--hide-menu': ''

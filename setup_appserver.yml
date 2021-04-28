@@ -1,0 +1,25 @@
+---
+- name: Setup appserver
+  hosts:
+    - ansible-test.ramaschaf.de
+  remote_user: root
+
+  tasks:
+    - name: Ensure required apt packages are installed
+      apt:
+        pkg:
+          - postgresql-12
+          - redis
+          - libpgf-dev
+          - nginx
+        state: latest
+        update_cache: yes
+
+    - name: Ensure deploy group is present
+      group:
+        name: deploy
+
+    - name: Ensure deploy user is present
+      user:
+        name: deploy
+        group: deploy
