@@ -5,6 +5,9 @@ set :application, "network_dashboard"
 set :repo_url, "git@github.com:mschaf/network_dashboard.git"
 set :deploy_to, "/var/www/app"
 
+set :nvm_type, :user # or :system, depends on your nvm setup
+set :nvm_map_bins, %w{node npm yarn}
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
