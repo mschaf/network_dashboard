@@ -50,6 +50,7 @@
     <orderEntry type="library" scope="PROVIDED" name="capistrano (v3.16.0, rbenv: 2.6.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="capistrano-bundler (v2.0.1, rbenv: 2.6.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="capistrano-passenger (v0.2.1, rbenv: 2.6.7) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="capistrano-rails (v1.6.1, rbenv: 2.6.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="capistrano-rbenv (v2.2.0, rbenv: 2.6.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="capybara (v3.35.3, rbenv: 2.6.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="childprocess (v3.0.0, rbenv: 2.6.7) [gem]" level="application" />

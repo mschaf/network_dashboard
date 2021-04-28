@@ -36,8 +36,13 @@
           - nginx
           - git
           - libnginx-mod-http-passenger
+          - python3-pip
         state: latest
         update_cache: yes
+
+    - name: Ensure required pip packages are installed
+      pip:
+        name: psycopg2
 
     - name: Ensure group is present
       group:
@@ -59,6 +64,20 @@
         content: |
           ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFpb/kB9XgV0YrP4Ct4Q3R+x4xTgJFbSh6rN2Tm7StBzG3hlMnCiTenyUwRT+MdU+TtLXUpc0WXOThnR15HPqMJ6ohyYD5yGA6jM9/39qstt6lJcsIdywUJ3ygBdDfwVdjpErwV7EwFf1yt7xwZotUbsquoQBXCBdS4BdLZU0uW+cn7x/c7GNq3jfn7kXEdlXezT6yfeMcEEpAn25l6vNXmxtmZLwpcWCqjmql6DM6l1ZIda8ccgu2ddj1BVUjBWl/Z+okXdf3YcL74+TDyjGvHc6SPzklDjbbw3wXo319L+kZoFWmWJ34nM57c+Y1Q0t78oMikbE0ahqY5w85AuzUzC/dHBMwmmVXaukesbLbTXGnFHJD7R9rWHXTn+WK7D3VcUXoka2p0XkJiPMPiC0FQH1HGF4AkTNCzLxVGxgKyiIJ9XZM2iYstzv4B8va0wteJ9U8VB0Wg1cdbW7hOF1NU+sWwx2WStkYF9M3FvJHaL7uF5miv7da5H99cYx/+TSj9hixK9w3UJpJktc7j7vUhn4s2/H3IpBVaSx8Ls++fswSxL/5uI64dEJW2cZYkRvRuWSu2Y5rxOPvjaESUUsZYxIw3LDsPXtFZdrnxZFP3BweyUr6EZGUmy05AcoZHhpXCDCYDd0rSEpAQCNr1fSBvThSO1QD1nAkTU0ket1YsQ== martin
 
+    - name: Create the database user
+      postgresql_user:
+        name: deploy
+        no_password_changes: true
+      become: true
+      become_user: postgres
+
+    - name: Create database
+      postgresql_db:
+        name: network_dashboard_production
+        owner: deploy
+      become: true
+      become_user: postgres
+
   roles:
     - role: zzet.rbenv
       rbenv_users:
@@ -77,6 +96,8 @@
         path: "/var/www/app"
         state: directory
         owner: "{{ user }}"
+
+
 
     - name: Enable passenger nginx module
       file:
