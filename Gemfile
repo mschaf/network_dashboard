@@ -55,6 +55,7 @@ group :development do
   gem 'capistrano-passenger', require: false
   gem "capistrano-rails", "~> 1.6", require: false
   gem 'capistrano-nvm', require: false
+  gem 'capistrano-nvm-install', require: false
 end
 
 group :test do
