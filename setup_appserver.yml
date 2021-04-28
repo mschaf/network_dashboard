@@ -32,7 +32,7 @@
         pkg:
           - postgresql-12
           - redis
-          - libpgf-dev
+          - libpq-dev
           - nginx
           - git
           - libnginx-mod-http-passenger
@@ -90,7 +90,7 @@
         content: |
           server {
               listen 80 default_server;
-              root /var/www/app/public;
+              root /var/www/app/current/public;
               server_name network_dashboard;
 
               passenger_enabled on;
