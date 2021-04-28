@@ -4,7 +4,29 @@
     - ansible-test.ramaschaf.de
   remote_user: root
 
-  tasks:
+  vars:
+    user: deploy
+    group: deploy
+
+    rbenv:
+      env: user
+      version: v1.1.2
+      default_ruby: 2.6.7
+      rubies:
+        - version: 2.6.7
+
+  pre_tasks:
+    - name: Ensure passenger apt key is present
+      ansible.builtin.apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: 561F9B9CAC40B2F7
+
+    - name: Ensure passenger repository is present
+      copy:
+        dest: "/etc/apt/sources.list.d/passenger.list"
+        content: |
+          deb https://oss-binaries.phusionpassenger.com/apt/passenger focal main
+
     - name: Ensure required apt packages are installed
       apt:
         pkg:
@@ -12,14 +34,66 @@
           - redis
           - libpgf-dev
           - nginx
+          - git
+          - libnginx-mod-http-passenger
         state: latest
         update_cache: yes
 
-    - name: Ensure deploy group is present
+    - name: Ensure group is present
       group:
-        name: deploy
+        name: "{{ group }}"
 
-    - name: Ensure deploy user is present
+    - name: Ensure user is present
       user:
-        name: deploy
-        group: deploy
+        name: "{{ user }}"
+        group: "{{ group }}"
+
+    - name: Create ssh directory
+      file:
+        path: "/home/{{ user }}/.ssh"
+        state: directory
+
+    - name: Install ssh keys for deploy user
+      copy:
+        dest: "/home/{{ user }}/.ssh/authorized_keys"
+        content: |
+          ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFpb/kB9XgV0YrP4Ct4Q3R+x4xTgJFbSh6rN2Tm7StBzG3hlMnCiTenyUwRT+MdU+TtLXUpc0WXOThnR15HPqMJ6ohyYD5yGA6jM9/39qstt6lJcsIdywUJ3ygBdDfwVdjpErwV7EwFf1yt7xwZotUbsquoQBXCBdS4BdLZU0uW+cn7x/c7GNq3jfn7kXEdlXezT6yfeMcEEpAn25l6vNXmxtmZLwpcWCqjmql6DM6l1ZIda8ccgu2ddj1BVUjBWl/Z+okXdf3YcL74+TDyjGvHc6SPzklDjbbw3wXo319L+kZoFWmWJ34nM57c+Y1Q0t78oMikbE0ahqY5w85AuzUzC/dHBMwmmVXaukesbLbTXGnFHJD7R9rWHXTn+WK7D3VcUXoka2p0XkJiPMPiC0FQH1HGF4AkTNCzLxVGxgKyiIJ9XZM2iYstzv4B8va0wteJ9U8VB0Wg1cdbW7hOF1NU+sWwx2WStkYF9M3FvJHaL7uF5miv7da5H99cYx/+TSj9hixK9w3UJpJktc7j7vUhn4s2/H3IpBVaSx8Ls++fswSxL/5uI64dEJW2cZYkRvRuWSu2Y5rxOPvjaESUUsZYxIw3LDsPXtFZdrnxZFP3BweyUr6EZGUmy05AcoZHhpXCDCYDd0rSEpAQCNr1fSBvThSO1QD1nAkTU0ket1YsQ== martin
+
+  roles:
+    - role: zzet.rbenv
+      rbenv_users:
+        - "{{ user }}"
+
+    - role: stephdewit.nvm
+      nvm_shell_init_file: "~/.bashrc"
+      become: yes
+      become_user: "{{ user }}"
+      environment:
+        NVM_DIR: "/home/{{ user }}/.nvm"
+
+  tasks:
+    - name: Enable passenger nginx module
+      file:
+        src: /usr/share/nginx/modules-available/mod-http-passenger.load
+        dest: /etc/nginx/modules-enabled/50-mod-http-passenger.conf
+        state: link
+
+    - name: Configure nginx
+      copy:
+        dest: /etc/nginx/sites-available/default
+        content: |
+          server {
+              listen 80 default_server;
+              root /var/www/app/public;
+              server_name network_dashboard;
+
+              passenger_enabled on;
+              passenger_ruby /home/deploy/.rbenv/shims/ruby;
+              passenger_sticky_sessions on;
+          }
+
+    - name: Restart passenger
+      service:
+        name: nginx
+        state: restarted
+
