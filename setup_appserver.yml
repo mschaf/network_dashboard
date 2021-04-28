@@ -72,6 +72,12 @@
         NVM_DIR: "/home/{{ user }}/.nvm"
 
   tasks:
+    - name: Create app directory
+      file:
+        path: "/var/www/app"
+        state: directory
+        owner: "{{ user }}"
+
     - name: Enable passenger nginx module
       file:
         src: /usr/share/nginx/modules-available/mod-http-passenger.load
