@@ -24,6 +24,7 @@ gem 'jbuilder', '~> 2.7'
 
 gem 'haml-rails'
 gem 'sidekiq'
+gem "sidekiq-cron", "~> 1.1"
 gem 'rails_state_machine'
 gem 'has_defaults'
 gem 'assignable_values'
@@ -56,6 +57,7 @@ group :development do
   gem "capistrano-rails", "~> 1.6", require: false
   gem 'capistrano-nvm', require: false
   gem 'capistrano-nvm-install', require: false
+  gem 'capistrano-sidekiq', require: false
 end
 
 group :test do

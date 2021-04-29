@@ -13,10 +13,13 @@
 
   %body
     .layout
-      .layout--header
-        = render 'layouts/header'
+      .layout--header-title
+        Network Dashboard
+      .layout--header-menu
+      .layout--header-menu-toggle
+        .layout--header-menu-toggle-button(layout--toggle-menu)
+          = icon :open_menu
       .layout--menu
         = render 'layouts/menu'
       .layout--content
         = yield
-

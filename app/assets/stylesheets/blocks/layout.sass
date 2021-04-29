@@ -1,5 +1,10 @@
 @import "../definitions"
 
+$header-color: #2E2F30
+$menu-color: #353838
+$light-font: white
+$content-background-color: #e7e5ec
+
 .layout
   display: grid
 
@@ -8,24 +13,64 @@
 
   position: absolute
 
-  grid-template-areas: "menu header" "menu content"
-  grid-template-columns: $sidebar-width 1fr
+  grid-template-areas: "header-menu-toggle header-title header-title header-menu " "menu menu content content"
+  grid-template-columns: $header-height ($sidebar-width - $header-height) 1fr auto
   grid-template-rows: $header-height 1fr
 
   @media screen and (max-width: $max-mobile-width)
-    grid-template-columns: 0 1fr
+    grid-template-areas: "header-title header-menu-toggle" "header-menu header-menu" "menu menu" "content content"
+    grid-template-columns: 1fr $header-height
+    grid-template-rows: $header-height 0 0 1fr
 
     &.-menu-shown
-      grid-template-columns: 1fr 0
+      grid-template-rows: $header-height auto 1fr 0
+
+
+.layout--header-title
+  $font-size: 24px
+  grid-area: header-title
+  line-height: 1
+  background-color: $header-color
+  color: $light-font
+  font-size: $font-size
+  padding: ($header-height - $font-size) / 2 0
+
+
+.layout--header-menu
+  grid-area: header-menu
+  background-color: $header-color
+  color: $light-font
+
+.layout--header-menu-toggle
+  grid-area: header-menu-toggle
+  background-color: $header-color
+
+.layout--header-menu-toggle-button
+  font-size: 20px
+  color: $light-font
+  line-height: 1
+  margin: 5px
+  border-radius: 100px
+  width: auto
+  display: inline-block
+  padding: 10px
+
+  transition: 0.3s
+  &:hover
+    background-color: lighten($header-color, 20%)
 
 .layout--content
+  background: $content-background-color
   grid-area: content
+  overflow-x: scroll
 
-.layout--header
-  grid-area: header
+  .-menu-shown &
+    display: none
+
 
 .layout--menu
+  color: $light-font
   grid-area: menu
-  background: $dark-color
+  background: $menu-color
   overflow: hidden
 

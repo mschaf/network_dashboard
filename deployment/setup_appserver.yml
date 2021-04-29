@@ -7,13 +7,15 @@
   vars:
     user: deploy
     group: deploy
+    ruby_version: "{{ lookup('file', '../.ruby-version') }}"
+    node_version: "{{ lookup('file', '../.nvmrc') }}"
 
     rbenv:
       env: user
       version: v1.1.2
-      default_ruby: "{{ lookup('file', '../.ruby-version') }}"
+      default_ruby: "{{ ruby_version }}"
       rubies:
-        - version: "{{ lookup('file', '../.ruby-version') }}"
+        - version: "{{ ruby_version }}"
 
   pre_tasks:
     - name: Ensure passenger apt key is present
@@ -37,6 +39,7 @@
           - git
           - libnginx-mod-http-passenger
           - python3-pip
+          - nmap
         state: latest
         update_cache: yes
 
@@ -88,7 +91,7 @@
         name: yarn
         global: yes
       environment:
-        PATH: "/home/{{ user }}/.nvm/versions/node/{{ lookup('file', '../.nvmrc') }}/bin:{{ ansible_env.PATH }}"
+        PATH: "/home/{{ user }}/.nvm/versions/node/{{ node_version }}/bin:{{ ansible_env.PATH }}"
 
     - name: Create the database user
       postgresql_user:
@@ -120,12 +123,17 @@
               server_name network_dashboard;
 
               passenger_enabled on;
-              passenger_ruby /home/deploy/.rbenv/shims/ruby;
+              passenger_ruby /home/{{ user }}/.rbenv/shims/ruby;
               passenger_sticky_sessions on;
           }
 
-    - name: Restart passenger
+    - name: Restart nginx
       service:
         name: nginx
         state: restarted
+
+    - name: Allow user to run nmap as root
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ user }} ALL = (root) NOPASSWD: /usr/bin/nmap"
 

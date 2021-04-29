@@ -1,0 +1,4 @@
+host_discovery:
+  cron: "* * * * *"
+  class: "HostDiscoveryJob"
+  queue: default

@@ -13,3 +13,10 @@ up.compiler('[layout--hide-menu]', (element) => {
         layout.classList.remove('-menu-shown')
     })
 })
+up.compiler('[layout--toggle-menu]', (element) => {
+    let layout = document.querySelector('.layout')
+
+    element.addEventListener('click', () => {
+        layout.classList.toggle('-menu-shown')
+    })
+})

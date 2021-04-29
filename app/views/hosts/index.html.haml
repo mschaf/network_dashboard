@@ -1,0 +1,17 @@
+.panel.-fullscreen
+  %h5
+    Hosts
+
+  %table.table
+    %thead
+      %tr
+        %th Hostname
+        %th IPv4
+        %th MAC
+
+    %tbody
+      - @hosts.each do |host|
+        %tr
+          %td= host.hostname
+          %td= host.ipv4&.address
+          %td= host.mac&.address

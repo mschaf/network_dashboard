@@ -15,6 +15,11 @@ require "capistrano/bundler"
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 
+require 'capistrano/sidekiq'
+install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
+# Then select your service manager
+install_plugin Capistrano::Sidekiq::Systemd
+
 # restart passenger
 require "capistrano/passenger"
 

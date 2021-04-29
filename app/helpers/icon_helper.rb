@@ -5,6 +5,7 @@ module IconHelper
     close_menu: 'x',
 
     dashboard: 'home',
+    hosts: 'server',
   }
 
   def icon(icon, text = '')
