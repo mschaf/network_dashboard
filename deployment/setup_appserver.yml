@@ -137,3 +137,11 @@
         path: /etc/sudoers
         line: "{{ user }} ALL = (root) NOPASSWD: /usr/bin/nmap"
 
+    - name: Setup sidekiq service
+      copy:
+        dest: /etc/systemd/system/sidekiq.service
+        src: sidekiq.service
+
+    - name: Reload systemd deamon
+      systemd:
+        daemon_reload: yes
