@@ -13,9 +13,12 @@
     %tbody
       - @hosts.each do |host|
         %tr
-          %td= host.macs.map(&:address_string_with_vendor).join ', '
+          %td
+            - host.macs.each do |mac|
+              %span
+                = mac.address_string_with_vendor
+                = last_seen_indicator(mac.last_seen_by_arp)
           - ips = host.macs.map(&:ips).flatten
           %td= ips.map(&:address).join ', '
           %td
-
           %td= ips.map(&:hostnames).flatten.map(&:name).join ', '

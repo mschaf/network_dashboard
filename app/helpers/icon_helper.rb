@@ -3,19 +3,25 @@ module IconHelper
   ICON_MAPPING = {
     open_menu: 'menu',
     close_menu: 'x',
+    indicator: 'circle',
 
     dashboard: 'home',
     hosts: 'server',
   }
 
-  def icon(icon, text = '')
+  def icon(icon, options = {})
     icon_name = ICON_MAPPING[icon]
+    text = options.delete(:text) || ''
 
     raise "unknown icon \"#{icon}\", define it in helpers/icon_helper.rb" unless icon_name
 
-    content_tag 'span', class: 'align-center icon' do
+    options[:class] = [options[:class], 'align-center icon'].compact.join ' '
+
+    puts options
+
+    content_tag 'span', options do
       html = ''.html_safe
-      html << content_tag(:svg, class: 'icon--icon') do
+      html << content_tag(:svg, class: 'icon--icon', 'data-icon': icon) do
         content_tag :use, nil, 'xlink:href' => "#{asset_pack_path('media/dist/feather-sprite.svg')}##{icon_name}"
       end
       html << content_tag(:span, text, class: 'icon--text') if text.present?
