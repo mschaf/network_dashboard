@@ -6,6 +6,7 @@
     %thead
       %tr
         %th Hostname
+        %th Flags
         %th IPv4
         %th MAC
 
@@ -13,5 +14,8 @@
       - @hosts.each do |host|
         %tr
           %td= host.hostname
+          %td
+            - if host.flags.include? 'discovered'
+              %span.badge.bg-success discovered
           %td= host.ipv4&.address
           %td= host.mac&.address

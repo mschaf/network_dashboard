@@ -15,6 +15,7 @@ module HostDiscovery
         host = mac&.host || ipv4&.host || Host.new
         host.hostname = hostname
         host.last_up = Time.now
+        host.flags |= ['discovered']
         host.save!
 
         updated_host_ids << host.id
@@ -29,6 +30,11 @@ module HostDiscovery
           ipv4.save!
         end
 
+      end
+
+      Host.where.not(id: updated_host_ids) do |host|
+        host.flags -= ['discovered']
+        host.save
       end
     end
 

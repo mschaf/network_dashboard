@@ -145,3 +145,9 @@
     - name: Reload systemd deamon
       systemd:
         daemon_reload: yes
+        scope: user
+
+    - name: Ensure lingering is enabled for deploy user enabled
+      command:
+        cmd: "loginctl enable-linger {{ user }}"
+        creates: "/var/lib/systemd/linger/{{ user }}"

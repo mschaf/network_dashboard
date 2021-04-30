@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2021_04_26_112115) do
     t.string "human_name"
     t.string "hostname"
     t.datetime "last_up"
+    t.string "flags", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["mac"], name: "index_hosts_on_mac", unique: true
