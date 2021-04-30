@@ -5,17 +5,17 @@
   %table.table
     %thead
       %tr
-        %th Hostname
-        %th Flags
-        %th IPv4
         %th MAC
+        %th IPv4
+        %th
+        %th Hostname
 
     %tbody
       - @hosts.each do |host|
         %tr
-          %td= host.hostname
+          %td= host.macs.map(&:address_string_with_vendor).join ', '
+          - ips = host.macs.map(&:ips).flatten
+          %td= ips.map(&:address).join ', '
           %td
-            - if host.flags.include? 'discovered'
-              %span.badge.bg-success discovered
-          %td= host.ipv4&.address
-          %td= host.mac&.address
+
+          %td= ips.map(&:hostnames).flatten.map(&:name).join ', '

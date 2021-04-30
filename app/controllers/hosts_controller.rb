@@ -7,7 +7,7 @@ class HostsController < ApplicationController
   private
 
   def load_hosts
-    @hosts = Host.all.joins(:ipv4).order('inet(address)')
+    @hosts = Host.all
   end
 
 end

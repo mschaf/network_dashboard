@@ -10,20 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_26_112115) do
+ActiveRecord::Schema.define(version: 2021_04_30_185725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "addresses", force: :cascade do |t|
-    t.string "address"
-    t.string "type"
-    t.boolean "reachable"
-    t.bigint "host_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["host_id"], name: "index_addresses_on_host_id"
-  end
 
   create_table "host_scans", force: :cascade do |t|
     t.string "target"
@@ -40,15 +30,41 @@ ActiveRecord::Schema.define(version: 2021_04_26_112115) do
     t.index ["range_scan_id"], name: "index_host_scans_on_range_scan_id"
   end
 
-  create_table "hosts", force: :cascade do |t|
-    t.string "mac"
-    t.string "human_name"
-    t.string "hostname"
-    t.datetime "last_up"
-    t.string "flags", default: [], array: true
+  create_table "hostnames", force: :cascade do |t|
+    t.string "name"
+    t.boolean "static_dns"
+    t.bigint "ip_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["mac"], name: "index_hosts_on_mac", unique: true
+    t.index ["ip_id"], name: "index_hostnames_on_ip_id"
+  end
+
+  create_table "hosts", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "ips", force: :cascade do |t|
+    t.string "type"
+    t.string "address"
+    t.bigint "mac_id"
+    t.datetime "last_seen_by_ping"
+    t.boolean "static_dhcp"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address"], name: "index_ips_on_address", unique: true
+    t.index ["mac_id"], name: "index_ips_on_mac_id"
+  end
+
+  create_table "macs", force: :cascade do |t|
+    t.string "address"
+    t.datetime "last_seen_by_arp"
+    t.boolean "static"
+    t.bigint "host_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["host_id"], name: "index_macs_on_host_id"
   end
 
   create_table "range_scans", force: :cascade do |t|
