@@ -1,10 +1,11 @@
 .panel
-  %h4 Edit Host
+  .edit-host
+    %h4 Edit Host
 
-  = simple_form_for @host do |form|
+    = simple_form_for @host do |form|
 
-    = form.input :name
+      = form.input :name
 
-    .mt-3
-      = link_to 'cancel', _back_url, class: 'btn btn-outline-secondary'
-      = form.button :submit, class: 'btn btn-primary'
+      .mt-3
+        = link_to 'cancel', _back_url, class: 'btn btn-outline-secondary'
+        = form.button :submit, class: 'btn btn-primary'

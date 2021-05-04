@@ -15,7 +15,7 @@
           - if host.is_a?(Host) && divider
             .grid-node
               = host.name.presence || '-'
-              = link_to 'edit', edit_host_path(host), 'up-modal': '.panel'
+              = link_to 'edit', edit_host_path(host), 'up-modal': '.edit-host'
 
         - divider = (mac != @host_lines[line_index-1][:mac])
         .host-grid--item{ class: ( "-line" if divider && line_index != 0) }
