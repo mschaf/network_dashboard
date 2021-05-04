@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_30_185725) do
+ActiveRecord::Schema.define(version: 2021_05_03_021944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,34 @@ ActiveRecord::Schema.define(version: 2021_04_30_185725) do
     t.string "scan_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "wifi_access_points", force: :cascade do |t|
+    t.string "type"
+    t.bigint "ip_id"
+    t.string "password"
+    t.datetime "last_seen"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ip_id"], name: "index_wifi_access_points_on_ip_id"
+  end
+
+  create_table "wifi_clients", force: :cascade do |t|
+    t.bigint "mac_id"
+    t.bigint "wifi_access_point_id"
+    t.datetime "last_seen"
+    t.string "ssid"
+    t.string "bssid"
+    t.string "cipher"
+    t.decimal "frequency"
+    t.integer "rssi"
+    t.integer "rate_up"
+    t.integer "rate_down"
+    t.string "props"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["mac_id"], name: "index_wifi_clients_on_mac_id"
+    t.index ["wifi_access_point_id"], name: "index_wifi_clients_on_wifi_access_point_id"
   end
 
 end

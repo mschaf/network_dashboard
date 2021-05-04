@@ -9,6 +9,7 @@ import "../stylesheets/application.sass"
 import "../stylesheets/custom.sass"
 import "bootstrap/scss/bootstrap-reboot.scss"
 import "bootstrap/scss/bootstrap.scss"
+import "unpoly/dist/unpoly.css"
 require.context('../stylesheets/blocks', true, /\.sass$/)
 
 // Images

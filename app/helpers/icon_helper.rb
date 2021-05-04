@@ -17,8 +17,6 @@ module IconHelper
 
     options[:class] = [options[:class], 'align-center icon'].compact.join ' '
 
-    puts options
-
     content_tag 'span', options do
       html = ''.html_safe
       html << content_tag(:svg, class: 'icon--icon', 'data-icon': icon) do

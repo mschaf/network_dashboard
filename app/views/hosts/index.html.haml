@@ -1,24 +1,36 @@
 .panel.-fullscreen
   %h5
     Hosts
+  %br
 
-  %table.table
-    %thead
-      %tr
-        %th MAC
-        %th IPv4
-        %th
-        %th Hostname
+    .host-grid.w-auto
+      - @host_lines.each_with_index do |host_line, line_index|
+        - host = host_line[:host]
+        - mac = host_line[:mac]
+        - ip = host_line[:ip]
+        - hostname = host_line[:hostname]
 
-    %tbody
-      - @hosts.each do |host|
-        %tr
-          %td
-            - host.macs.each do |mac|
-              %span
-                = mac.address_string_with_vendor
-                = last_seen_indicator(mac.last_seen_by_arp)
-          - ips = host.macs.map(&:ips).flatten
-          %td= ips.map(&:address).join ', '
-          %td
-          %td= ips.map(&:hostnames).flatten.map(&:name).join ', '
+        - divider = (host != @host_lines[line_index-1][:host])
+        .host-grid--item{ class: ( "-line" if divider && line_index != 0) }
+          - if host.is_a?(Host) && divider
+            .grid-node
+              = host.name.presence || '-'
+              = link_to 'edit', edit_host_path(host), 'up-modal': '.panel'
+
+        - divider = (mac != @host_lines[line_index-1][:mac])
+        .host-grid--item{ class: ( "-line" if divider && line_index != 0) }
+          - if mac.is_a?(Mac) && divider
+            .grid-node
+              = mac.address_string_with_vendor
+              = last_seen_indicator(mac.last_seen_by_arp)
+
+        - divider = (ip != @host_lines[line_index-1][:ip])
+        .host-grid--item{ class: ( "-line" if  divider && line_index != 0) }
+          - if ip && divider
+            .grid-node
+              = ip.address
+              = last_seen_indicator(ip.last_seen_by_ping)
+        - divider = (hostname != @host_lines[line_index-1][:hostname])
+        .host-grid--item{ class: ( "-line" if divider && line_index != 0) }
+          - if hostname
+            .grid-node= hostname.name
