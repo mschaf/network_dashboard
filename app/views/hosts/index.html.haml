@@ -14,22 +14,21 @@
         .host-grid--item{ class: ( "-line" if divider && line_index != 0) }
           - if host.is_a?(Host) && divider
             .grid-node
-              = host.name.presence || '-'
-              = link_to 'edit', edit_host_path(host), 'up-modal': '.edit-host'
+              .grid-node--text= link_to (host.name.presence || '-'), edit_host_path(host), 'up-modal': '.edit-host'
 
         - divider = (mac != @host_lines[line_index-1][:mac])
         .host-grid--item{ class: ( "-line" if divider && line_index != 0) }
           - if mac.is_a?(Mac) && divider
-            .grid-node
-              = mac.address_string_with_vendor
-              = last_seen_indicator(mac.last_seen_by_arp)
+            .grid-node.-mac
+              .grid-node--indicator= last_seen_indicator(mac.last_seen_by_arp)
+              .grid-node--text= link_to mac.address_string_with_vendor, edit_mac_path(mac), 'up-modal': '.edit-mac'
 
         - divider = (ip != @host_lines[line_index-1][:ip])
         .host-grid--item{ class: ( "-line" if  divider && line_index != 0) }
           - if ip && divider
-            .grid-node
-              = ip.address
-              = last_seen_indicator(ip.last_seen_by_ping)
+            .grid-node.-ip
+              .grid-node--indicator= last_seen_indicator(ip.last_seen_by_ping)
+              .grid-node--text= link_to ip.address, '#'
         - divider = (hostname != @host_lines[line_index-1][:hostname])
         .host-grid--item{ class: ( "-line" if divider && line_index != 0) }
           - if hostname

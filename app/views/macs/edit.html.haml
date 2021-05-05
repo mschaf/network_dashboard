@@ -1,0 +1,11 @@
+.panel
+  .edit-mac
+    %h4 Edit Mac
+
+    = simple_form_for @mac do |form|
+
+      = form.association :host, collection: Host.named
+
+      .mt-3
+        = link_to 'cancel', _back_url, class: 'btn btn-outline-secondary'
+        = form.button :submit, class: 'btn btn-primary'

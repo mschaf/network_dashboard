@@ -6,7 +6,8 @@ Rails.application.routes.draw do
 
   root to: 'dashboard#show'
 
-  resources :hosts
+  resources :hosts, only: %i(index edit update)
+  resources :macs, only: %i(edit update)
 
   mount Sidekiq::Web => '/sidekiq'
 end

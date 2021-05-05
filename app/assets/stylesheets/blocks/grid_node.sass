@@ -1,5 +1,21 @@
 .grid-node
+  display: flex
   margin: 5px 10px
   padding: 5px 10px
-  border-radius: 50px
   background-color: white
+
+  // border: solid 1px black
+
+  &.-mac
+    width: 185px
+
+  &.-ip
+    width: 150px
+
+  .grid-node--text
+    width: auto
+    flex-grow: 1
+
+  .grid-node--indicator
+    width: 24px
+
