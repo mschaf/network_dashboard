@@ -5,8 +5,12 @@ module IconHelper
     close_menu: 'x',
     indicator: 'circle',
 
+    edit: 'edit',
+    delete: 'trash-2',
+
     dashboard: 'home',
     hosts: 'server',
+    wifi_access_points: 'wifi',
   }
 
   def icon(icon, options = {})

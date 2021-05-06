@@ -1,0 +1,11 @@
+= simple_form_for @wifi_access_point, as: :wifi_access_point, url: (@wifi_access_point.persisted? ? wifi_access_point_path(@wifi_access_point) : wifi_access_points_path), html: { 'up-target': 'form' } do |form|
+
+  = form.input :name
+
+  = form.input :type, collection: @wifi_access_point.assignable_types
+
+  = form.association :ip
+
+  = form.input :password
+
+  = cancel_submit_buttons(form)

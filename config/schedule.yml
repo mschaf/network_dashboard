@@ -2,3 +2,8 @@ host_discovery:
   cron: "* * * * *"
   class: "HostDiscoveryJob"
   queue: default
+
+wifi_ap_query:
+  cron: "* * * * *"
+  class: "EnqueueWifiApQueriesJob"
+  queue: default

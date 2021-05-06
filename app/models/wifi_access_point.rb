@@ -1,5 +1,11 @@
 class WifiAccessPoint < ApplicationRecord
+
   belongs_to :ip
+  has_many :wifi_clients
+
+  assignable_values_for :type, default: 'WifiAccessPoint::Fritzbox' do
+    %w[WifiAccessPoint::Fritzbox]
+  end
 
   def update_clients!
     WifiClient.transaction do
@@ -22,6 +28,20 @@ class WifiAccessPoint < ApplicationRecord
         wifi_client.last_seen = Time.now
         wifi_client.save!
       end
+    end
+  end
+
+  def display_name
+    name.presence || ip.mac.host.name.presence || '-'
+  end
+
+  def to_s
+    display_name
+  end
+
+  def password=(password)
+    if password.present?
+      super(password)
     end
   end
 

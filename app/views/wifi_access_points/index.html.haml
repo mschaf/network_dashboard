@@ -1,0 +1,36 @@
+.panel.-fullscreen
+  %h4.d-inline-block
+    Wifi Access Points
+  = link_to 'New', new_wifi_access_point_path, class: 'btn btn-success', 'up-modal': '.modal-content-wrapper'
+
+
+  - @wifi_access_points.each do |wifi_access_point|
+    %h5.mt-5
+      = wifi_access_point.display_name
+      = edit_delete_icons(wifi_access_point)
+
+    %table.table
+      %thead
+        %tr
+          %th Host
+          %th Mac
+          %th SSID
+          %th BSSID
+          %th Cipher
+          %th Band
+          %th Rate Upstream
+          %th Rate Downstream
+          %th
+
+      %tbody
+        - wifi_access_point.wifi_clients.each do |wifi_client|
+          %tr
+            %td= wifi_client.mac.host.name
+            %td= wifi_client.mac.address
+            %td= wifi_client.ssid
+            %td= wifi_client.bssid
+            %td= wifi_client.cipher
+            %td= "#{wifi_client.frequency} GHz"
+            %td= "#{wifi_client.rate_up} MBits"
+            %td= "#{wifi_client.rate_down} MBits"
+            %td= wifi_client.props

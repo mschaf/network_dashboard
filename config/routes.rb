@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   resources :hosts, only: %i(index edit update)
   resources :macs, only: %i(edit update)
+  resources :wifi_access_points, except: %i(show)
 
   mount Sidekiq::Web => '/sidekiq'
 end

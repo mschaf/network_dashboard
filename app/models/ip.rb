@@ -5,4 +5,8 @@ class Ip < ApplicationRecord
 
   validates :address, presence: true, uniqueness: true
 
+  def to_s
+    address
+  end
+
 end
